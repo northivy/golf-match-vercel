@@ -1,0 +1,1 @@
+export default function App() { return <h1>Golf Match Tracker App Loaded</h1>; }
