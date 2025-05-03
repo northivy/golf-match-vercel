@@ -5,7 +5,7 @@ const maidstoneStrokeIndex = {
   1: 3, 2: 9, 3: 1, 4: 5, 5: 13, 6: 11, 7: 7, 8: 15, 9: 17,
   10: 2, 11: 4, 12: 16, 13: 10, 14: 18, 15: 8, 16: 6, 17: 12, 18: 14
 };
-const danGetsStrokes = [3, 11, 1, 12, 4, 17]; // HCP values for Dan’s 6 strokes
+const danGetsStrokes = [3, 11, 1, 12, 4, 17];
 const pointValues = { 13: 1, 14: 2, 15: 3, 16: 4, 17: 5, 18: 6 };
 
 export default function App() {
@@ -27,7 +27,6 @@ export default function App() {
     const danStroke = danGetsStrokes.includes(hole) ? 1 : 0;
 
     if (you != null && dan != null) {
-      // Holes 1–6: Match Play
       if (hole <= 6) {
         const netYou = you;
         const netDan = dan - danStroke;
@@ -37,7 +36,6 @@ export default function App() {
         }
       }
 
-      // Holes 7–12: Vegas
       if (hole >= 7 && hole <= 12) {
         const yourVegas = Number(`${you}${dan}`);
         const danVegas = Number(`${dan}${you}`);
@@ -49,7 +47,6 @@ export default function App() {
         }
       }
 
-      // Holes 13–18: Point Game
       if (hole >= 13) {
         const pts = pointValues[hole] || 0;
         const netYou = you;
@@ -62,40 +59,53 @@ export default function App() {
     }
   };
 
+  const addSidePoint = (hole, player, type) => {
+    setPoints((prev) => ({ ...prev, [player]: prev[player] + 1 }));
+  };
+
   return (
-    <div className="p-4 max-w-2xl mx-auto">
-      <h2 className="text-xl font-bold mb-4">Golf Match Tracker</h2>
-      <div className="grid grid-cols-1 gap-2">
+    <div className="p-4 max-w-md mx-auto text-sm font-sans">
+      <h2 className="text-lg font-bold mb-4 text-center">Golf Match Tracker</h2>
+      <div className="flex flex-col gap-4">
         {holes.map((hole) => (
-          <div key={hole} className="border p-3 rounded shadow-sm">
-            <div className="font-semibold">
+          <div key={hole} className="border p-3 rounded shadow">
+            <div className="font-semibold mb-2">
               Hole {hole}{" "}
               {danGetsStrokes.includes(hole) && (
-                <span className="text-sm text-green-600">– Dan gets a stroke</span>
+                <span className="text-green-600">– Dan gets a stroke</span>
               )}
             </div>
-            <div className="flex gap-2 mt-2">
+            <div className="flex gap-2 mb-2">
               <input
                 type="number"
                 placeholder="Your score"
-                className="border p-2 w-full"
+                className="border rounded p-2 w-1/2"
                 onChange={(e) => updateScore(hole, "you", e.target.value)}
               />
               <input
                 type="number"
                 placeholder="Dan's score"
-                className="border p-2 w-full"
+                className="border rounded p-2 w-1/2"
                 onChange={(e) => updateScore(hole, "dan", e.target.value)}
               />
+            </div>
+            <div className="grid grid-cols-2 gap-1 text-xs text-gray-700">
+              {["closest", "longest", "greenie", "sandie", "snake"].map((type) => (
+                <label key={type} className="flex items-center gap-1">
+                  <input
+                    type="checkbox"
+                    onChange={(e) => e.target.checked && addSidePoint(hole, "you", type)}
+                  />
+                  {type.charAt(0).toUpperCase() + type.slice(1)}
+                </label>
+              ))}
             </div>
           </div>
         ))}
       </div>
-      <div className="mt-6 text-lg font-bold text-center">
-        Total Points — You: {points.you} | Dan: {points.dan} | $
-        {5 * Math.abs(points.you - points.dan)}
+      <div className="mt-6 text-base font-bold text-center">
+        Total Points — You: {points.you} | Dan: {points.dan} | ${5 * Math.abs(points.you - points.dan)}
       </div>
     </div>
   );
 }
-// force change
