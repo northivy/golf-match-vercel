@@ -1,4 +1,5 @@
 import { useState } from "react";
+import logo from "./assets/logo.png";
 
 const holes = Array.from({ length: 18 }, (_, i) => i + 1);
 const maidstoneStrokeIndex = {
@@ -65,6 +66,7 @@ export default function App() {
 
   return (
     <div className="p-4 max-w-md mx-auto text-sm font-sans">
+      <img src={logo} alt="Mr. Data Cup logo" className="w-3/4 mx-auto mb-4" />
       <h2 className="text-lg font-bold mb-4 text-center">Golf Match Tracker</h2>
       <div className="flex flex-col gap-4">
         {holes.map((hole) => (
