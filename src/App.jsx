@@ -67,17 +67,14 @@ export default function App() {
   return (
     <div className="p-4 max-w-md mx-auto text-sm font-sans">
       <img src={logo} alt="Mr. Data Cup logo" className="w-3/4 mx-auto mb-4" />
-      <h2 className="text-lg font-bold mb-4 text-center">Golf Match Tracker</h2>
-      <div className="flex flex-col gap-4">
+      <h2 className="text-lg font-bold mb-6 text-center">Golf Match Tracker</h2>
+      <div className="flex flex-col gap-6">
         {holes.map((hole) => (
-          <div key={hole} className="border p-3 rounded shadow">
+          <div key={hole} className="border p-4 rounded shadow">
             <div className="font-semibold mb-2">
-              Hole {hole}{" "}
-              {danGetsStrokes.includes(hole) && (
-                <span className="text-green-600">– Dan gets a stroke</span>
-              )}
+              Hole {hole} {danGetsStrokes.includes(hole) && <span className="text-green-600">– Dan gets a stroke</span>}
             </div>
-            <div className="flex gap-2 mb-2">
+            <div className="flex gap-2 mb-3">
               <input
                 type="number"
                 placeholder="Your score"
@@ -91,21 +88,30 @@ export default function App() {
                 onChange={(e) => updateScore(hole, "dan", e.target.value)}
               />
             </div>
-            <div className="grid grid-cols-2 gap-1 text-xs text-gray-700">
-              {["closest", "longest", "greenie", "sandie", "snake"].map((type) => (
-                <label key={type} className="flex items-center gap-1">
-                  <input
-                    type="checkbox"
-                    onChange={(e) => e.target.checked && addSidePoint(hole, "you", type)}
-                  />
-                  {type.charAt(0).toUpperCase() + type.slice(1)}
-                </label>
+            <div className="grid grid-cols-2 gap-2 text-xs text-gray-700">
+              {['closest', 'longest', 'greenie', 'sandie', 'snake'].map((type) => (
+                <div key={type} className="flex flex-col">
+                  <label className="flex items-center gap-1">
+                    <input
+                      type="checkbox"
+                      onChange={(e) => e.target.checked && addSidePoint(hole, 'you', type)}
+                    />
+                    You – {type.charAt(0).toUpperCase() + type.slice(1)}
+                  </label>
+                  <label className="flex items-center gap-1">
+                    <input
+                      type="checkbox"
+                      onChange={(e) => e.target.checked && addSidePoint(hole, 'dan', type)}
+                    />
+                    Dan – {type.charAt(0).toUpperCase() + type.slice(1)}
+                  </label>
+                </div>
               ))}
             </div>
           </div>
         ))}
       </div>
-      <div className="mt-6 text-base font-bold text-center">
+      <div className="mt-10 text-base font-bold text-center">
         Total Points — You: {points.you} | Dan: {points.dan} | ${5 * Math.abs(points.you - points.dan)}
       </div>
     </div>
